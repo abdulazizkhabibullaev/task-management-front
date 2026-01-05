@@ -1,0 +1,19 @@
+{
+  "files": [],
+  "compilerOptions": {
+    "composite": true,
+    "types": [
+      "element-plus/global"
+    ],
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+  },
+  "references": [
+    {
+      "path": "./tsconfig.node.json",
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ]
+}

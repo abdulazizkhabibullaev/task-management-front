@@ -1,0 +1,236 @@
+// ================================
+// Responsive Breakpoints System
+// ================================
+
+// Breakpoint values (mobile-first approach)
+$breakpoint-xs: 0;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;
+
+// Breakpoint map for easy iteration
+$breakpoints: (
+  'xs': $breakpoint-xs,
+  'sm': $breakpoint-sm,
+  'md': $breakpoint-md,
+  'lg': $breakpoint-lg,
+  'xl': $breakpoint-xl,
+  'xxl': $breakpoint-xxl,
+);
+
+// Container max-widths for each breakpoint
+$container-max-widths: (
+  'sm': 540px,
+  'md': 720px,
+  'lg': 960px,
+  'xl': 1140px,
+  'xxl': 1320px,
+);
+
+// ================================
+// Responsive Mixins
+// ================================
+
+// Mobile first: min-width (and up)
+@mixin media-up($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $value: map-get($breakpoints, $breakpoint);
+    @if $value == 0 {
+      @content;
+    } @else {
+      @media screen and (min-width: $value) {
+        @content;
+      }
+    }
+  } @else {
+    @media screen and (min-width: $breakpoint) {
+      @content;
+    }
+  }
+}
+
+// Desktop first: max-width (and down)
+@mixin media-down($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $value: map-get($breakpoints, $breakpoint);
+    @media screen and (max-width: ($value - 0.02px)) {
+      @content;
+    }
+  } @else {
+    @media screen and (max-width: $breakpoint) {
+      @content;
+    }
+  }
+}
+
+// Between two breakpoints
+@mixin media-between($lower, $upper) {
+  $lower-value: if(
+    map-has-key($breakpoints, $lower),
+    map-get($breakpoints, $lower),
+    $lower
+  );
+  $upper-value: if(
+    map-has-key($breakpoints, $upper),
+    map-get($breakpoints, $upper),
+    $upper
+  );
+
+  @media screen and (min-width: $lower-value) and (max-width: ($upper-value - 0.02px)) {
+    @content;
+  }
+}
+
+// Only for a specific breakpoint range
+@mixin media-only($breakpoint) {
+  @if $breakpoint == 'xs' {
+    @include media-down('sm') {
+      @content;
+    }
+  } @else if $breakpoint == 'sm' {
+    @include media-between('sm', 'md') {
+      @content;
+    }
+  } @else if $breakpoint == 'md' {
+    @include media-between('md', 'lg') {
+      @content;
+    }
+  } @else if $breakpoint == 'lg' {
+    @include media-between('lg', 'xl') {
+      @content;
+    }
+  } @else if $breakpoint == 'xl' {
+    @include media-between('xl', 'xxl') {
+      @content;
+    }
+  } @else if $breakpoint == 'xxl' {
+    @include media-up('xxl') {
+      @content;
+    }
+  }
+}
+
+// ================================
+// Shorthand Mixins
+// ================================
+
+// Extra small devices (phones, less than 576px)
+@mixin xs {
+  @include media-down('sm') {
+    @content;
+  }
+}
+
+// Small devices (landscape phones, 576px and up)
+@mixin sm {
+  @include media-up('sm') {
+    @content;
+  }
+}
+
+// Medium devices (tablets, 768px and up)
+@mixin md {
+  @include media-up('md') {
+    @content;
+  }
+}
+
+// Large devices (desktops, 992px and up)
+@mixin lg {
+  @include media-up('lg') {
+    @content;
+  }
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@mixin xl {
+  @include media-up('xl') {
+    @content;
+  }
+}
+
+// Extra extra large devices (larger desktops, 1400px and up)
+@mixin xxl {
+  @include media-up('xxl') {
+    @content;
+  }
+}
+
+// Mobile only (less than tablet)
+@mixin mobile {
+  @include media-down('md') {
+    @content;
+  }
+}
+
+// Tablet only
+@mixin tablet {
+  @include media-between('md', 'lg') {
+    @content;
+  }
+}
+
+// Tablet and up
+@mixin tablet-up {
+  @include media-up('md') {
+    @content;
+  }
+}
+
+// Desktop only
+@mixin desktop {
+  @include media-up('lg') {
+    @content;
+  }
+}
+
+// ================================
+// Responsive Typography Mixin
+// ================================
+
+@mixin responsive-font($min-size, $max-size, $min-vw: 320px, $max-vw: 1200px) {
+  font-size: $min-size;
+
+  @media screen and (min-width: $min-vw) {
+    font-size: calc(
+      #{$min-size} + #{strip-unit($max-size - $min-size)} *
+        ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)})
+    );
+  }
+
+  @media screen and (min-width: $max-vw) {
+    font-size: $max-size;
+  }
+}
+
+// Helper function to strip unit
+@function strip-unit($value) {
+  @return $value / ($value * 0 + 1);
+}
+
+// ================================
+// Responsive Spacing Mixin
+// ================================
+
+@mixin responsive-spacing(
+  $property,
+  $mobile-value,
+  $tablet-value: null,
+  $desktop-value: null
+) {
+  #{$property}: $mobile-value;
+
+  @if $tablet-value {
+    @include md {
+      #{$property}: $tablet-value;
+    }
+  }
+
+  @if $desktop-value {
+    @include lg {
+      #{$property}: $desktop-value;
+    }
+  }
+}

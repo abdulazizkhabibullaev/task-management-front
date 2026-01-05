@@ -1,0 +1,626 @@
+// ================================
+// Responsive Utility Classes
+// ================================
+
+@use 'breakpoints' as *;
+
+// ================================
+// Display Utilities
+// ================================
+
+// Hide/Show utilities for each breakpoint
+.d-none {
+  display: none !important;
+}
+.d-inline {
+  display: inline !important;
+}
+.d-inline-block {
+  display: inline-block !important;
+}
+.d-block {
+  display: block !important;
+}
+.d-flex {
+  display: flex !important;
+}
+.d-inline-flex {
+  display: inline-flex !important;
+}
+.d-grid {
+  display: grid !important;
+}
+
+// Responsive display utilities
+@each $breakpoint, $value in $breakpoints {
+  @include media-up($breakpoint) {
+    .d-#{$breakpoint}-none {
+      display: none !important;
+    }
+    .d-#{$breakpoint}-inline {
+      display: inline !important;
+    }
+    .d-#{$breakpoint}-inline-block {
+      display: inline-block !important;
+    }
+    .d-#{$breakpoint}-block {
+      display: block !important;
+    }
+    .d-#{$breakpoint}-flex {
+      display: flex !important;
+    }
+    .d-#{$breakpoint}-inline-flex {
+      display: inline-flex !important;
+    }
+    .d-#{$breakpoint}-grid {
+      display: grid !important;
+    }
+  }
+}
+
+// Hide on specific breakpoints
+.hide-xs {
+  @include xs {
+    display: none !important;
+  }
+}
+.hide-sm {
+  @include media-only('sm') {
+    display: none !important;
+  }
+}
+.hide-md {
+  @include media-only('md') {
+    display: none !important;
+  }
+}
+.hide-lg {
+  @include media-only('lg') {
+    display: none !important;
+  }
+}
+.hide-xl {
+  @include media-only('xl') {
+    display: none !important;
+  }
+}
+
+// Show only on specific breakpoints
+.show-xs-only {
+  display: none !important;
+  @include xs {
+    display: block !important;
+  }
+}
+.show-sm-only {
+  display: none !important;
+  @include media-only('sm') {
+    display: block !important;
+  }
+}
+.show-md-only {
+  display: none !important;
+  @include media-only('md') {
+    display: block !important;
+  }
+}
+.show-lg-only {
+  display: none !important;
+  @include media-only('lg') {
+    display: block !important;
+  }
+}
+
+// Mobile/Desktop visibility
+.hide-mobile {
+  @include mobile {
+    display: none !important;
+  }
+}
+.hide-desktop {
+  @include desktop {
+    display: none !important;
+  }
+}
+.show-mobile-only {
+  display: none !important;
+  @include mobile {
+    display: block !important;
+  }
+}
+.show-desktop-only {
+  display: none !important;
+  @include desktop {
+    display: block !important;
+  }
+}
+
+// ================================
+// Flexbox Utilities
+// ================================
+
+.flex-row {
+  flex-direction: row !important;
+}
+.flex-column {
+  flex-direction: column !important;
+}
+.flex-row-reverse {
+  flex-direction: row-reverse !important;
+}
+.flex-column-reverse {
+  flex-direction: column-reverse !important;
+}
+
+.flex-wrap {
+  flex-wrap: wrap !important;
+}
+.flex-nowrap {
+  flex-wrap: nowrap !important;
+}
+.flex-wrap-reverse {
+  flex-wrap: wrap-reverse !important;
+}
+
+.justify-start {
+  justify-content: flex-start !important;
+}
+.justify-end {
+  justify-content: flex-end !important;
+}
+.justify-center {
+  justify-content: center !important;
+}
+.justify-between {
+  justify-content: space-between !important;
+}
+.justify-around {
+  justify-content: space-around !important;
+}
+.justify-evenly {
+  justify-content: space-evenly !important;
+}
+
+.align-start {
+  align-items: flex-start !important;
+}
+.align-end {
+  align-items: flex-end !important;
+}
+.align-center {
+  align-items: center !important;
+}
+.align-baseline {
+  align-items: baseline !important;
+}
+.align-stretch {
+  align-items: stretch !important;
+}
+
+.flex-grow-0 {
+  flex-grow: 0 !important;
+}
+.flex-grow-1 {
+  flex-grow: 1 !important;
+}
+.flex-shrink-0 {
+  flex-shrink: 0 !important;
+}
+.flex-shrink-1 {
+  flex-shrink: 1 !important;
+}
+
+// Responsive flex utilities
+@each $breakpoint, $value in $breakpoints {
+  @include media-up($breakpoint) {
+    .flex-#{$breakpoint}-row {
+      flex-direction: row !important;
+    }
+    .flex-#{$breakpoint}-column {
+      flex-direction: column !important;
+    }
+    .flex-#{$breakpoint}-wrap {
+      flex-wrap: wrap !important;
+    }
+    .flex-#{$breakpoint}-nowrap {
+      flex-wrap: nowrap !important;
+    }
+    .justify-#{$breakpoint}-start {
+      justify-content: flex-start !important;
+    }
+    .justify-#{$breakpoint}-end {
+      justify-content: flex-end !important;
+    }
+    .justify-#{$breakpoint}-center {
+      justify-content: center !important;
+    }
+    .justify-#{$breakpoint}-between {
+      justify-content: space-between !important;
+    }
+    .align-#{$breakpoint}-start {
+      align-items: flex-start !important;
+    }
+    .align-#{$breakpoint}-end {
+      align-items: flex-end !important;
+    }
+    .align-#{$breakpoint}-center {
+      align-items: center !important;
+    }
+  }
+}
+
+// ================================
+// Gap Utilities
+// ================================
+
+$gap-sizes: (
+  0: 0,
+  1: 4px,
+  2: 8px,
+  3: 12px,
+  4: 16px,
+  5: 20px,
+  6: 24px,
+  8: 32px,
+  10: 40px,
+);
+
+@each $size, $value in $gap-sizes {
+  .gap-#{$size} {
+    gap: $value !important;
+  }
+  .gap-x-#{$size} {
+    column-gap: $value !important;
+  }
+  .gap-y-#{$size} {
+    row-gap: $value !important;
+  }
+}
+
+// ================================
+// Spacing Utilities (Margin & Padding)
+// ================================
+
+$spacing-sizes: (
+  0: 0,
+  1: 4px,
+  2: 8px,
+  3: 12px,
+  4: 16px,
+  5: 20px,
+  6: 24px,
+  8: 32px,
+  10: 40px,
+  auto: auto,
+);
+
+@each $size, $value in $spacing-sizes {
+  // Margin
+  .m-#{$size} {
+    margin: $value !important;
+  }
+  .mt-#{$size} {
+    margin-top: $value !important;
+  }
+  .mr-#{$size} {
+    margin-right: $value !important;
+  }
+  .mb-#{$size} {
+    margin-bottom: $value !important;
+  }
+  .ml-#{$size} {
+    margin-left: $value !important;
+  }
+  .mx-#{$size} {
+    margin-left: $value !important;
+    margin-right: $value !important;
+  }
+  .my-#{$size} {
+    margin-top: $value !important;
+    margin-bottom: $value !important;
+  }
+
+  // Padding (skip auto)
+  @if $size != auto {
+    .p-#{$size} {
+      padding: $value !important;
+    }
+    .pt-#{$size} {
+      padding-top: $value !important;
+    }
+    .pr-#{$size} {
+      padding-right: $value !important;
+    }
+    .pb-#{$size} {
+      padding-bottom: $value !important;
+    }
+    .pl-#{$size} {
+      padding-left: $value !important;
+    }
+    .px-#{$size} {
+      padding-left: $value !important;
+      padding-right: $value !important;
+    }
+    .py-#{$size} {
+      padding-top: $value !important;
+      padding-bottom: $value !important;
+    }
+  }
+}
+
+// Responsive spacing
+@each $breakpoint, $bp-value in $breakpoints {
+  @include media-up($breakpoint) {
+    @each $size, $value in $spacing-sizes {
+      .m-#{$breakpoint}-#{$size} {
+        margin: $value !important;
+      }
+      .mt-#{$breakpoint}-#{$size} {
+        margin-top: $value !important;
+      }
+      .mb-#{$breakpoint}-#{$size} {
+        margin-bottom: $value !important;
+      }
+      .mx-#{$breakpoint}-#{$size} {
+        margin-left: $value !important;
+        margin-right: $value !important;
+      }
+      .my-#{$breakpoint}-#{$size} {
+        margin-top: $value !important;
+        margin-bottom: $value !important;
+      }
+
+      @if $size != auto {
+        .p-#{$breakpoint}-#{$size} {
+          padding: $value !important;
+        }
+        .pt-#{$breakpoint}-#{$size} {
+          padding-top: $value !important;
+        }
+        .pb-#{$breakpoint}-#{$size} {
+          padding-bottom: $value !important;
+        }
+        .px-#{$breakpoint}-#{$size} {
+          padding-left: $value !important;
+          padding-right: $value !important;
+        }
+        .py-#{$breakpoint}-#{$size} {
+          padding-top: $value !important;
+          padding-bottom: $value !important;
+        }
+      }
+    }
+  }
+}
+
+// ================================
+// Width Utilities
+// ================================
+
+.w-25 {
+  width: 25% !important;
+}
+.w-50 {
+  width: 50% !important;
+}
+.w-75 {
+  width: 75% !important;
+}
+.w-100 {
+  width: 100% !important;
+}
+.w-auto {
+  width: auto !important;
+}
+
+.max-w-100 {
+  max-width: 100% !important;
+}
+.min-w-0 {
+  min-width: 0 !important;
+}
+
+// ================================
+// Height Utilities
+// ================================
+
+.h-25 {
+  height: 25% !important;
+}
+.h-50 {
+  height: 50% !important;
+}
+.h-75 {
+  height: 75% !important;
+}
+.h-100 {
+  height: 100% !important;
+}
+.h-auto {
+  height: auto !important;
+}
+.h-screen {
+  height: 100vh !important;
+}
+
+.min-h-screen {
+  min-height: 100vh !important;
+}
+
+// ================================
+// Text Utilities
+// ================================
+
+.text-left {
+  text-align: left !important;
+}
+.text-center {
+  text-align: center !important;
+}
+.text-right {
+  text-align: right !important;
+}
+
+.text-nowrap {
+  white-space: nowrap !important;
+}
+.text-wrap {
+  white-space: normal !important;
+}
+.text-break {
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+.text-truncate {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+// Responsive text alignment
+@each $breakpoint, $value in $breakpoints {
+  @include media-up($breakpoint) {
+    .text-#{$breakpoint}-left {
+      text-align: left !important;
+    }
+    .text-#{$breakpoint}-center {
+      text-align: center !important;
+    }
+    .text-#{$breakpoint}-right {
+      text-align: right !important;
+    }
+  }
+}
+
+// ================================
+// Overflow Utilities
+// ================================
+
+.overflow-auto {
+  overflow: auto !important;
+}
+.overflow-hidden {
+  overflow: hidden !important;
+}
+.overflow-visible {
+  overflow: visible !important;
+}
+.overflow-scroll {
+  overflow: scroll !important;
+}
+.overflow-x-auto {
+  overflow-x: auto !important;
+}
+.overflow-y-auto {
+  overflow-y: auto !important;
+}
+.overflow-x-hidden {
+  overflow-x: hidden !important;
+}
+.overflow-y-hidden {
+  overflow-y: hidden !important;
+}
+
+// ================================
+// Position Utilities
+// ================================
+
+.position-static {
+  position: static !important;
+}
+.position-relative {
+  position: relative !important;
+}
+.position-absolute {
+  position: absolute !important;
+}
+.position-fixed {
+  position: fixed !important;
+}
+.position-sticky {
+  position: sticky !important;
+}
+
+// ================================
+// Grid Utilities
+// ================================
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+.grid-cols-6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+}
+.grid-cols-12 {
+  grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+}
+
+// Responsive grid columns
+@each $breakpoint, $value in $breakpoints {
+  @include media-up($breakpoint) {
+    .grid-cols-#{$breakpoint}-1 {
+      grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    }
+    .grid-cols-#{$breakpoint}-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+    .grid-cols-#{$breakpoint}-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+    .grid-cols-#{$breakpoint}-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+    .grid-cols-#{$breakpoint}-6 {
+      grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    }
+  }
+}
+
+// ================================
+// Container Classes
+// ================================
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+
+  @include sm {
+    max-width: map-get($container-max-widths, 'sm');
+  }
+
+  @include md {
+    max-width: map-get($container-max-widths, 'md');
+  }
+
+  @include lg {
+    max-width: map-get($container-max-widths, 'lg');
+  }
+
+  @include xl {
+    max-width: map-get($container-max-widths, 'xl');
+  }
+
+  @include xxl {
+    max-width: map-get($container-max-widths, 'xxl');
+  }
+}
+
+.container-fluid {
+  width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-left: auto;
+  margin-right: auto;
+}

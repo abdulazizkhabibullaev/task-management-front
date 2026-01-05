@@ -1,0 +1,303 @@
+// ================================
+// Global SCSS Entry Point
+// ================================
+
+// Forward all partials
+@forward 'variables';
+@forward 'breakpoints';
+
+// Import utilities that generate actual CSS
+@use 'breakpoints' as *;
+@use 'variables' as *;
+@use 'responsive-utilities';
+
+// ================================
+// CSS Custom Properties (for JS access)
+// ================================
+:root {
+  // Breakpoint values as CSS custom properties
+  --breakpoint-xs: 0px;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-xxl: 1400px;
+
+  // Layout
+  --sidebar-width: #{$sidebar-width};
+  --sidebar-collapsed-width: #{$sidebar-collapsed-width};
+  --header-height: #{$header-height};
+  --header-height-mobile: #{$header-height-mobile};
+
+  // Spacing
+  --spacing-xs: #{$spacing-xs};
+  --spacing-sm: #{$spacing-sm};
+  --spacing-md: #{$spacing-md};
+  --spacing-lg: #{$spacing-lg};
+  --spacing-xl: #{$spacing-xl};
+
+  // Element Plus aside width override
+  --el-aside-width: #{$sidebar-width};
+
+  @include mobile {
+    --el-aside-width: 0px;
+    --header-height: #{$header-height-mobile};
+  }
+
+  @include tablet {
+    --el-aside-width: #{$sidebar-collapsed-width};
+  }
+}
+
+// ================================
+// Global Base Styles
+// ================================
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+
+  @include mobile {
+    font-size: 14px;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// ================================
+// Responsive Images
+// ================================
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+// ================================
+// Responsive Tables
+// ================================
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  @include mobile {
+    margin-bottom: $spacing-md;
+
+    // Shadow hint for scrollable content
+    background:
+      linear-gradient(to right, white 30%, rgba(255, 255, 255, 0)),
+      linear-gradient(to right, rgba(255, 255, 255, 0), white 70%) 0 100%,
+      radial-gradient(farthest-side at 0% 50%, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)),
+      radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)) 0
+        100%;
+    background-repeat: no-repeat;
+    background-size:
+      40px 100%,
+      40px 100%,
+      14px 100%,
+      14px 100%;
+    background-position:
+      0 0,
+      100%,
+      0 0,
+      100%;
+    background-attachment: local, local, scroll, scroll;
+  }
+}
+
+// ================================
+// Responsive Forms
+// ================================
+.form-responsive {
+  display: grid;
+  gap: $spacing-md;
+
+  @include xs {
+    grid-template-columns: 1fr;
+  }
+
+  @include sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include lg {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+
+  > * {
+    flex: 1;
+    min-width: 200px;
+
+    @include mobile {
+      min-width: 100%;
+    }
+  }
+}
+
+// ================================
+// Responsive Cards Grid
+// ================================
+.cards-grid {
+  display: grid;
+  gap: $spacing-md;
+
+  @include xs {
+    grid-template-columns: 1fr;
+  }
+
+  @include sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include md {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include xl {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+// ================================
+// Element Plus Responsive Overrides
+// ================================
+
+// Dialog responsive
+.el-dialog {
+  @include mobile {
+    --el-dialog-width: 95% !important;
+    --el-dialog-margin-top: 5vh !important;
+    margin: 5vh auto !important;
+    width: 95% !important;
+  }
+}
+
+// Drawer responsive
+.el-drawer {
+  @include mobile {
+    width: 100% !important;
+  }
+}
+
+// Table responsive
+.el-table {
+  .el-table__cell {
+    padding: 12px;
+  }
+
+  @include mobile {
+    font-size: 12px;
+
+    .el-table__cell {
+      padding: 8px 4px;
+    }
+  }
+}
+
+// Form items responsive
+.el-form-item {
+  @include mobile {
+    margin-bottom: 12px;
+
+    .el-form-item__label {
+      padding-bottom: 4px;
+    }
+  }
+}
+
+// Button responsive
+.el-button {
+  @include mobile {
+    padding: 8px 12px;
+
+    &.el-button--large {
+      padding: 10px 16px;
+    }
+  }
+}
+
+// Input responsive
+.el-input,
+.el-select {
+  @include mobile {
+    --el-input-height: 36px;
+  }
+}
+
+// Pagination responsive
+.el-pagination {
+  @include mobile {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+
+    .el-pagination__sizes,
+    .el-pagination__jump {
+      display: none;
+    }
+  }
+}
+
+// Menu responsive (for sidebar)
+.el-menu {
+  @include mobile {
+    --el-menu-item-height: 48px;
+  }
+
+  &.el-menu--collapse {
+    width: $sidebar-collapsed-width;
+  }
+}
+
+// Card responsive
+.el-card {
+  @include mobile {
+    --el-card-padding: 12px;
+  }
+}
+
+// ================================
+// Print Styles
+// ================================
+@media print {
+  .hide-print,
+  .el-aside,
+  .el-header,
+  .el-pagination,
+  button:not(.print-visible) {
+    display: none !important;
+  }
+
+  .el-main {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .el-table {
+    font-size: 10px;
+  }
+}
