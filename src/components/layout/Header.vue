@@ -39,11 +39,10 @@
 
 <script lang="ts" setup>
 import LanguageSelect from '@/components/common/LanguageSelect.vue';
-import router from '@/router';
-import { useMainStore } from '@/stores/main';
-import { computed } from 'vue';
-import { ArrowDown, SwitchButton, Expand } from '@element-plus/icons-vue';
 import { useResponsive } from '@/composables/useResponsive';
+import { useMainStore } from '@/stores/main';
+import { ArrowDown, Expand, SwitchButton } from '@element-plus/icons-vue';
+import { computed } from 'vue';
 
 defineEmits<{
   'toggle-menu': [];
@@ -62,7 +61,7 @@ const userInitial = computed(() => {
 const handleCommand = async (command: string) => {
   if (command === 'logout') {
     await mainStore.logout();
-    router.push({ name: 'login' });
+    window.location.reload();
   }
 };
 </script>

@@ -100,16 +100,24 @@
           />
 
           <el-form-item :label="$t('FORMS.PRIORITY')" prop="priority">
-            <filter-select
-              :options="priorityOptions"
-              :model-value="taskForm.priority"
-              @change="(val: any) => (taskForm.priority = val)"
-              clearable
-              filterable
-              :default-option="taskForm.priority"
-              select-key="value"
+            <el-radio-group
+              v-model="taskForm.priority"
+              class="priority-group"
               :disabled="isLoading"
-            />
+            >
+              <el-radio-button value="low">
+                <el-icon><ArrowDown /></el-icon>
+                <span>{{ $t('COMMON.LOW') }}</span>
+              </el-radio-button>
+              <el-radio-button value="medium">
+                <el-icon><Minus /></el-icon>
+                <span>{{ $t('COMMON.MEDIUM') }}</span>
+              </el-radio-button>
+              <el-radio-button value="high">
+                <el-icon><ArrowUp /></el-icon>
+                <span>{{ $t('COMMON.HIGH') }}</span>
+              </el-radio-button>
+            </el-radio-group>
           </el-form-item>
 
           <el-form-item :label="$t('FORMS.DUE_DATE')" prop="due_date">
@@ -136,6 +144,7 @@ import Select from '@/components/common/form-elements/Select.vue';
 import TextInput from '@/components/common/form-elements/TextInput.vue';
 import { $t } from '@/plugins/i18n';
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
+import { ArrowDown, ArrowUp, Minus } from '@element-plus/icons-vue';
 import { computed, reactive, ref, watch } from 'vue';
 
 const isLoading = ref(false);
@@ -287,9 +296,70 @@ const handleDeleteById = async (id: any) => {
   padding: 24px;
 }
 
+:deep(.priority-group) {
+  width: 100%;
+  display: flex;
+  gap: 8px;
+
+  .el-radio-button {
+    flex: 1;
+
+    .el-radio-button__inner {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 15px;
+      border-radius: 6px;
+      transition: all 0.3s;
+
+      .el-icon {
+        font-size: 16px;
+      }
+    }
+
+    &:first-child .el-radio-button__inner {
+      border-radius: 6px;
+    }
+
+    &:last-child .el-radio-button__inner {
+      border-radius: 6px;
+    }
+  }
+
+  .el-radio-button:has(.el-radio-button__original-radio[value='low']:checked) {
+    .el-radio-button__inner {
+      background: #f0f9eb;
+      border-color: #67c23a;
+      color: #67c23a;
+    }
+  }
+
+  .el-radio-button:has(.el-radio-button__original-radio[value='medium']:checked) {
+    .el-radio-button__inner {
+      background: #fdf6ec;
+      border-color: #e6a23c;
+      color: #e6a23c;
+    }
+  }
+
+  .el-radio-button:has(.el-radio-button__original-radio[value='high']:checked) {
+    .el-radio-button__inner {
+      background: #fef0f0;
+      border-color: #f56c6c;
+      color: #f56c6c;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .tasks {
     padding: 16px;
+  }
+
+  :deep(.priority-group) {
+    flex-direction: column;
   }
 }
 </style>

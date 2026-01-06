@@ -13,7 +13,10 @@
         "LOW": "Past",
         "MEDIUM": "O'rta",
         "HIGH": "Yuqori",
-        "TASK": "Vazifa"
+        "TASK": "Vazifa",
+        "LOGIN_SUBTITLE": "Davom etish uchun tizimga kiring",
+        "NO_ACCOUNT": "Akkountingiz yo'qmi?",
+        "HAVE_ACCOUNT": "Akkountingiz bormi?"
     },
     "NAV_ASIDE": {
         "DASHBOARD": "Dashboard",
@@ -43,7 +46,9 @@
         "SAVE": "Saqlash",
         "CONFIRM": "Tasdiqlash",
         "SEARCH": "Qidirish",
-        "LOGOUT": "Chiqish"
+        "LOGOUT": "Chiqish",
+        "LOGIN": "Kirish",
+        "REGISTER": "Ro'yxatdan o'tish"
     },
     "LANGUAGE": {
         "UZ": "O'zbekcha",
@@ -67,6 +72,15 @@
         "PROJECT": "Loyiha",
         "STATUS": "Status",
         "PRIORITY": "Muhimlik darajasi",
-        "DUE_DATE": "Muddat"
+        "DUE_DATE": "Muddat",
+        "PHONE_NUMBER": "Telefon raqami",
+        "PASSWORD": "Parol",
+        "REGISTER": "Ro'yxatdan o'tish",
+        "FULL_NAME": "To'liq ism",
+        "CONFIRM_PASSWORD": "Parolni tasdiqlang",
+        "REQUIRED": "Majburiy maydon",
+        "PASSWORD_MIN_LENGTH": "Parol kamida 6 ta belgidan iborat bo'lishi kerak",
+        "PASSWORDS_NOT_MATCH": "Parollar mos kelishi shart",
+        "REGISTER_SUBTITLE": "Davom etish uchun ro'yxatdan o'ting"
     }
 }
