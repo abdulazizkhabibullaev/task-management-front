@@ -15,8 +15,13 @@ const props = defineProps({
 const icons = import.meta.glob('@/assets/icons/*.svg');
 
 const icon = computed(() => {
-  return defineAsyncComponent(
-    () => icons[`/src/assets/icons/${props.name}.svg`]() as Promise<any>,
-  );
+  const iconPath = `/src/assets/icons/${props.name}.svg`;
+  const iconLoader = icons[iconPath];
+
+  if (!iconLoader) {
+    throw new Error(`Icon not found: ${props.name}`);
+  }
+
+  return defineAsyncComponent(() => iconLoader() as Promise<any>);
 });
 </script>
