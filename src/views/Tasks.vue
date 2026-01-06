@@ -8,17 +8,54 @@
       ref="tableRef"
       @edit="openEditDialog"
       @delete="handleDeleteById"
-    />
+    >
+      <template #header>
+        <el-col :span="15">
+          <el-row :gutter="20">
+            <el-col :span="7">
+              <filter-select
+                clearable
+                filterable
+                remote
+                remote-url="project/paging"
+                @change="(val: any) => (filters.project_id = val)"
+                :placeholder="$t('FORMS.PROJECT')"
+              />
+            </el-col>
+            <el-col :span="7">
+              <filter-select
+                :options="priorityOptions"
+                :model-value="filters.priority"
+                @change="(val: any) => (filters.priority = val)"
+                :placeholder="$t('FORMS.PRIORITY')"
+                clearable
+                filterable
+                select-key="value"
+              />
+            </el-col>
+            <el-col :span="7">
+              <filter-select
+                :options="statusOptions"
+                :model-value="filters.status"
+                @change="(val: any) => (filters.status = val)"
+                :placeholder="$t('FORMS.STATUS')"
+                clearable
+                filterable
+                select-key="value"
+              />
+            </el-col>
+          </el-row>
+        </el-col>
+      </template>
+    </Table>
 
     <FormDrawer
       :is-opened="dialogVisible"
-      :title="isEdit ? $t('task.editTask') : $t('task.createTask')"
       @closed="closeDialog"
       @submit="handleSubmit"
-      :loading="submitLoading"
+      :loading="isLoading"
       item="task"
       :is-editing="isEdit"
-      :custom-title="true"
       :editable="true"
     >
       <template #form>
@@ -29,57 +66,59 @@
           :rules="taskRules"
         >
           <TextInput
-            :label="$t('task.title')"
+            :label="$t('FORMS.TITLE')"
             prop="title"
             :model-value="taskForm.title"
             @input="(val: string) => (taskForm.title = val)"
-            :placeholder="$t('task.titlePlaceholder')"
+            :disabled="isLoading"
           />
 
           <TextInput
-            :label="$t('task.description')"
+            :label="$t('FORMS.DESCRIPTION')"
             prop="description"
             type="textarea"
             :rows="4"
             :model-value="taskForm.description"
             @input="(val: string) => (taskForm.description = val)"
-            :placeholder="$t('task.descriptionPlaceholder')"
+            :disabled="isLoading"
           />
 
           <Select
-            :label="$t('task.project')"
+            :model-value="taskForm.project"
             prop="project_id"
-            :model-value="taskForm.project_id"
-            @change="(val: any) => (taskForm.project_id = val)"
-            :options="projectOptions"
-            :placeholder="$t('task.selectProject')"
+            data-url="project/paging"
+            :label="$t('FORMS.PROJECT')"
+            :default-option="taskForm.project"
+            @change="
+              (val: any) => {
+                taskForm.project_id = val?._id;
+                taskForm.project = val;
+              }
+            "
+            :placeholder="$t('FORMS.SELECT_PROJECT')"
+            :disabled="isLoading"
           />
 
-          <Select
-            :label="$t('task.status.label')"
-            prop="status"
-            :model-value="taskForm.status"
-            @change="(val: any) => (taskForm.status = val)"
-            :options="statusOptions"
-            :placeholder="$t('task.selectStatus')"
-          />
+          <el-form-item :label="$t('FORMS.PRIORITY')" prop="priority">
+            <filter-select
+              :options="priorityOptions"
+              :model-value="taskForm.priority"
+              @change="(val: any) => (taskForm.priority = val)"
+              clearable
+              filterable
+              :default-option="taskForm.priority"
+              select-key="value"
+              :disabled="isLoading"
+            />
+          </el-form-item>
 
-          <Select
-            :label="$t('task.priority.label')"
-            prop="priority"
-            :model-value="taskForm.priority"
-            @change="(val: any) => (taskForm.priority = val)"
-            :options="priorityOptions"
-            :placeholder="$t('task.selectPriority')"
-          />
-
-          <DatePicker
-            :label="$t('task.dueDate')"
-            prop="due_date"
-            :model-value="taskForm.due_date"
-            @change="(val: any) => (taskForm.due_date = val)"
-            :placeholder="$t('task.selectDueDate')"
-          />
+          <el-form-item :label="$t('FORMS.DUE_DATE')" prop="due_date">
+            <DatePicker
+              :model-value="taskForm.due_date"
+              @change="(val: any) => (taskForm.due_date = val)"
+              :disabled="isLoading"
+            />
+          </el-form-item>
         </el-form>
       </template>
     </FormDrawer>
@@ -89,67 +128,62 @@
 <script lang="ts" setup>
 import { $api } from '@/common/api';
 import { PageNames } from '@/common/constants/table';
+import type { Project } from '@/common/types/project';
+import DatePicker from '@/components/common/DatePicker.vue';
 import FormDrawer from '@/components/common/FormDrawer.vue';
 import Table from '@/components/common/Table.vue';
 import Select from '@/components/common/form-elements/Select.vue';
 import TextInput from '@/components/common/form-elements/TextInput.vue';
-import DatePicker from '@/components/common/DatePicker.vue';
 import { $t } from '@/plugins/i18n';
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 
-const submitLoading = ref(false);
+const isLoading = ref(false);
 const dialogVisible = ref(false);
 const isEdit = ref(false);
 const editingId = ref();
 const taskFormRef = ref<FormInstance>();
 const tableRef = ref();
-const projects = ref<any[]>([]);
 
 const filters = reactive({
-  search: '',
-  project_id: null as string | null,
-  status: null as string | null,
-  priority: null as string | null,
+  project_id: undefined,
+  status: undefined,
+  priority: undefined,
 });
 
 const taskForm = reactive({
   title: '',
   description: '',
-  project_id: null as string | null,
-  status: 'to_do',
-  priority: 'medium',
+  project_id: '',
+  project: {} as Project,
+  priority: 'low',
   due_date: null as Date | null,
 });
 
-const statusOptions = computed(() => [
-  { label: $t('task.status.to_do'), value: 'to_do' },
-  { label: $t('task.status.in_progress'), value: 'in_progress' },
-  { label: $t('task.status.completed'), value: 'completed' },
-]);
+const priorityOptions = [
+  { name: $t('COMMON.LOW'), value: 'low' },
+  { name: $t('COMMON.MEDIUM'), value: 'medium' },
+  { name: $t('COMMON.HIGH'), value: 'high' },
+];
 
-const priorityOptions = computed(() => [
-  { label: $t('task.priority.low'), value: 'low' },
-  { label: $t('task.priority.medium'), value: 'medium' },
-  { label: $t('task.priority.high'), value: 'high' },
-]);
-
-const projectOptions = computed(() =>
-  projects.value.map(p => ({ label: p.name, value: p._id })),
-);
+const statusOptions = [
+  { name: $t('COMMON.TO_DO'), value: 'to_do' },
+  { name: $t('COMMON.IN_PROGRESS'), value: 'in_progress' },
+  { name: $t('COMMON.COMPLETED'), value: 'completed' },
+];
 
 const taskRules = computed<FormRules>(() => ({
   title: [
     {
       required: true,
-      message: $t('task.titleRequired'),
+      message: $t('COMMON.REQUIRED'),
       trigger: ['blur'],
     },
   ],
   project_id: [
     {
       required: true,
-      message: $t('task.projectRequired'),
+      message: $t('COMMON.REQUIRED'),
       trigger: ['change'],
     },
   ],
@@ -159,17 +193,13 @@ const refreshTable = () => {
   tableRef.value?.getPagingData();
 };
 
-const fetchProjects = async () => {
-  try {
-    const response = await $api.common.getPagingData('project/paging', {
-      page: 1,
-      limit: 100,
-    });
-    projects.value = response.data || [];
-  } catch (error) {
-    console.error('Error fetching projects:', error);
-  }
-};
+watch(
+  () => filters,
+  () => {
+    tableRef.value?.getPagingData(filters);
+  },
+  { deep: true },
+);
 
 const openCreateDialog = () => {
   isEdit.value = false;
@@ -177,16 +207,19 @@ const openCreateDialog = () => {
   dialogVisible.value = true;
 };
 
-const openEditDialog = (task: any) => {
-  isEdit.value = true;
-  editingId.value = task._id;
-  taskForm.title = task.title;
-  taskForm.description = task.description || '';
-  taskForm.project_id = task.project_id;
-  taskForm.status = task.status;
-  taskForm.priority = task.priority;
-  taskForm.due_date = task.due_date;
-  dialogVisible.value = true;
+const openEditDialog = async (id: string) => {
+  try {
+    isEdit.value = true;
+    editingId.value = id;
+    dialogVisible.value = true;
+    const task = await $api.task.getById(id);
+    taskForm.title = task.title;
+    taskForm.description = task.description || '';
+    taskForm.project_id = task.project_id;
+    taskForm.project = task.project as Project;
+    taskForm.priority = task.priority;
+    taskForm.due_date = task.due_date as Date;
+  } catch {}
 };
 
 const closeDialog = () => {
@@ -198,9 +231,9 @@ const resetForm = () => {
   editingId.value = undefined;
   taskForm.title = '';
   taskForm.description = '';
-  taskForm.project_id = null;
-  taskForm.status = 'to_do';
-  taskForm.priority = 'medium';
+  taskForm.project_id = '';
+  taskForm.project = {} as Project;
+  taskForm.priority = 'low';
   taskForm.due_date = null;
   taskFormRef.value?.clearValidate();
 };
@@ -209,28 +242,26 @@ const handleSubmit = async () => {
   try {
     await taskFormRef.value?.validate(async (valid: boolean) => {
       if (valid) {
-        submitLoading.value = true;
+        isLoading.value = true;
         if (isEdit.value && editingId.value) {
           await $api.task.update({
             _id: editingId.value,
             title: taskForm.title,
             description: taskForm.description,
             project_id: taskForm.project_id!,
-            status: taskForm.status as 'to_do' | 'in_progress' | 'completed',
             priority: taskForm.priority as 'low' | 'medium' | 'high',
             due_date: taskForm.due_date || undefined,
           });
-          ElMessage.success($t('task.updateSuccess'));
+          ElMessage.success($t('MESSAGES.SUCCESS_UPDATE'));
         } else {
           await $api.task.create({
             title: taskForm.title,
             description: taskForm.description,
             project_id: taskForm.project_id!,
-            status: taskForm.status as 'to_do' | 'in_progress' | 'completed',
             priority: taskForm.priority as 'low' | 'medium' | 'high',
             due_date: taskForm.due_date || undefined,
           });
-          ElMessage.success($t('task.createSuccess'));
+          ElMessage.success($t('MESSAGES.SUCCESS_CREATE'));
         }
         closeDialog();
         refreshTable();
@@ -238,21 +269,17 @@ const handleSubmit = async () => {
     });
   } catch (error: any) {
   } finally {
-    submitLoading.value = false;
+    isLoading.value = false;
   }
 };
 
 const handleDeleteById = async (id: any) => {
   try {
     await $api.task.delete(id);
-    ElMessage.success($t('task.deleteSuccess'));
+    ElMessage.success($t('MESSAGES.SUCCESS_DELETE'));
     refreshTable();
   } catch (error: any) {}
 };
-
-onMounted(() => {
-  fetchProjects();
-});
 </script>
 
 <style lang="scss" scoped>

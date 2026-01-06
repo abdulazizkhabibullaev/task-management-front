@@ -6,15 +6,15 @@ export class ProjectApi extends Api {
     return this.execute<Project>('post', 'project/create', data);
   }
 
-  getById(id: number) {
-    return this.execute<Project>('get', `project/${id}`, null);
+  getById(id: string) {
+    return this.execute<Project>('get', `project/get-by-id/${id}`, null);
   }
 
   update(data: Partial<Project>) {
-    return this.execute<Project>('put', `project`, data);
+    return this.execute<Project>('put', `project/update`, data);
   }
 
-  delete(id: number) {
-    return this.execute<any>('delete', `project/${id}`, null);
+  delete(id: string) {
+    return this.execute<any>('delete', `project/delete/${id}`, null);
   }
 }

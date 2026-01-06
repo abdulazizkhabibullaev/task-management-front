@@ -1,11 +1,8 @@
 <template>
   <div class="page">
-    <!-- Filter Panel Slot -->
-    <slot name="filter"></slot>
-
-    <div class="header" v-if="props.createButton || props.exportButton">
-      <el-row justify="space-between" align="middle">
-        <el-col :span="props.createButton ? 4 : 0" v-if="props.createButton">
+    <div class="header">
+      <el-row justify="space-between">
+        <el-col :span="4" v-if="props.createButton">
           <Button
             @click="() => $emit('create')"
             :name="$t('COMMANDS.CREATE')"
@@ -17,20 +14,29 @@
         <el-col :span="props.createButton ? 20 : 24">
           <el-row :gutter="20" justify="end" class="header-content">
             <slot name="header"></slot>
-            <el-col :span="3" v-if="props.exportButton">
+            <el-col :span="4">
               <Button
+                v-if="props.exportButton"
                 style="background-color: #34d6af; border: none; height: 36px"
                 full-width
                 border-radius="8px"
                 @click="handleExport"
-                :disabled="isLoading"
-                :loading="isDownloading"
               >
                 <template #default>
                   <v-icon name="file"></v-icon>
-                  <span style="padding-left: 5px">{{ $t('COMMON.EXCEL') }}</span>
+                  <span style="padding-left: 5px">{{ $t('TABLE.EXCEL') }}</span>
                 </template>
               </Button>
+            </el-col>
+            <el-col :span="5" v-if="props.searchable">
+              <el-input
+                v-model="search"
+                :placeholder="$t('COMMANDS.SEARCH')"
+                :prefix-icon="Search"
+                class="search"
+                @input="handleSearchChange"
+                style="background-color: #fff"
+              />
             </el-col>
           </el-row>
         </el-col>
@@ -46,10 +52,7 @@
       :header-row-class-name="props.headerClassName"
       ref="tableRef"
       border
-      @select-all="(data: any) => $emit('select-all', data)"
-      stripe
     >
-      <el-table-column v-if="props.selection" type="selection" />
       <el-table-column
         v-if="props.indexing"
         type="index"
@@ -61,15 +64,14 @@
               ? '59px'
               : '75px'
         "
-        :label="$t('TABLE.NUMBER')"
       >
       </el-table-column>
+      <el-table-column v-if="props.selection" type="selection" />
       <el-table-column
         v-for="column in columns"
         :key="column.key"
         :label="$t(`TABLE.${column.translation_key}`)"
         :prop="column.key"
-        :min-width="column.width || 140"
       >
         <template v-slot="scope">
           <div
@@ -88,7 +90,7 @@
       <el-table-column
         align="right"
         v-if="props.deletable || props.editable"
-        width="120px"
+        width="140px"
         :label="$t('TABLE.ACTIONS')"
       >
         <template #default="scope">
@@ -115,7 +117,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column v-if="props.manualColumn" :label="props.manualColumnLabel">
+      <el-table-column v-if="props.manualColumn">
         <template #default="scope">
           <slot name="extra" :data="scope"></slot>
         </template>
@@ -154,7 +156,7 @@ import myCookie from '@/common/utils/my-cookie';
 import { NumberFormat } from '@/common/utils/number-format';
 import { $t } from '@/plugins/i18n';
 import router from '@/router';
-import { Delete, Edit } from '@element-plus/icons-vue';
+import { Delete, Edit, Search } from '@element-plus/icons-vue';
 import { dayjs, ElTableColumn } from 'element-plus';
 import { computed, onBeforeMount, ref } from 'vue';
 import Button from './Button.vue';
@@ -175,9 +177,6 @@ const props = defineProps({
   manualColumn: {
     type: Boolean,
     default: false,
-  },
-  manualColumnLabel: {
-    type: String,
   },
   title: {
     type: String,
@@ -204,10 +203,6 @@ const props = defineProps({
   exportPayload: {
     default: {},
   },
-  pagingMethod: {
-    type: String,
-    default: 'post',
-  },
 });
 
 const data = ref<any[]>([]);
@@ -219,31 +214,20 @@ const mainPayload = computed<{ page?: number; limit?: number; search: string }>(
   () => router.currentRoute.value.query as any,
 );
 const isLoading = ref(false);
-const isDownloading = ref(false);
 const dialogOpened = ref(false);
 const deletingId = ref();
 const nf = new NumberFormat();
-const currentRoute = router.currentRoute.value.name as string;
 const getPagingData = async (queryParams: any = {}) => {
   isLoading.value = true;
   try {
-    let payload = {
-      ...mainPayload.value,
-      page: Number(mainPayload.value.page || 1),
-      limit: Number(mainPayload.value.limit || 50),
-    };
+    let payload = { page: 1, limit: 50, ...mainPayload.value };
     if (props.searchable && search) payload.search = search.value;
     if (props.queryParams) payload = { ...payload, ...props.queryParams };
     if (queryParams) payload = { ...payload, ...queryParams };
-    const resp = await $api.common.getPagingData(
-      props.dataUrl,
-      payload,
-      props.pagingMethod,
-    );
+    const resp = await $api.common.getPagingData(props.dataUrl, payload);
 
     data.value = resp.data;
     total.value = resp.total;
-    $emit('data', resp.data);
   } catch (e) {
     console.log(e);
   } finally {
@@ -280,8 +264,7 @@ const getFormattedCell = (column: TableColumn, cellValue: any, row?: any) => {
       return cellValue;
 
     case TableColumnType.DATE:
-      if (cellValue)
-        return dayjs(cellValue).format(column.date_format || 'YYYY-MM-DD HH:mm');
+      if (cellValue) return dayjs(cellValue).format(column.date_format);
       return '';
 
     case TableColumnType.ENUM:
@@ -324,8 +307,6 @@ const $emit = defineEmits<{
   (e: 'delete', id: string): void;
   (e: 'row-click', id: string): void;
   (e: 'row-info', data: any): void;
-  (e: 'select-all', data: any): void;
-  (e: 'data', data: any): void;
 }>();
 
 const onEdit = (row: any) => {
@@ -342,28 +323,20 @@ const onRowClick = (row: any, column: any, event: Event) => {
 };
 
 const handleExport = async () => {
-  try {
-    isLoading.value = true;
-    isDownloading.value = true;
-    if (props.exportButton && props.exportUrl) {
-      const url = await $api.common.execute<string>('post', props.exportUrl, {
-        ...router.currentRoute.value.query,
-        ...props.exportPayload,
-      });
-      const a = document.createElement('a');
-      a.href = utils.getImageUrl(url);
-      document.body.appendChild(a);
+  if (props.exportButton && props.exportUrl) {
+    const url = await $api.common.execute<string>('post', props.exportUrl, {
+      ...router.currentRoute.value.query,
+      ...props.exportPayload,
+    });
+    const a = document.createElement('a');
+    a.href = utils.getImageUrl(url);
+    document.body.appendChild(a);
 
-      // Trigger the download
-      a.click();
+    // Trigger the download
+    a.click();
 
-      // Remove the anchor element after the download
-      document.body.removeChild(a);
-    }
-  } catch (e) {
-  } finally {
-    isLoading.value = false;
-    isDownloading.value = false;
+    // Remove the anchor element after the download
+    document.body.removeChild(a);
   }
 };
 
@@ -405,112 +378,36 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-@use '@/assets/scss/breakpoints' as *;
-@use '@/assets/scss/variables' as *;
-
 .page {
   .table {
-    height: 70vh;
-
-    @include mobile {
-      height: auto;
-      min-height: 50vh;
-      max-height: 65vh;
-    }
-
-    @include tablet {
-      height: 65vh;
-    }
+    height: 75vh;
   }
 
   .header {
     min-height: 45px;
     border-radius: 12px 12px 0 0;
-    margin-bottom: $spacing-sm;
 
     .title {
-      padding: $spacing-md;
+      padding: 16px;
       font-weight: 400;
       font-size: 24px;
       line-height: 27.28px;
-
-      @include mobile {
-        font-size: 18px;
-        padding: $spacing-sm;
-      }
     }
-
     .header-content {
       padding-left: 10px;
-
-      @include mobile {
-        padding-left: 0;
-        flex-wrap: wrap;
-        gap: $spacing-sm;
-      }
     }
-
     .btn {
       height: 36px;
-
-      @include mobile {
-        height: 32px;
-        font-size: 12px;
-      }
     }
-
     .search {
       border-radius: 10px;
       height: 36px;
-
-      @include mobile {
-        height: 32px;
-      }
-    }
-
-    // Responsive grid for header on mobile
-    @include mobile {
-      :deep(.el-row) {
-        flex-direction: column;
-        gap: $spacing-sm;
-      }
-
-      :deep(.el-col) {
-        max-width: 100% !important;
-        flex: 0 0 100% !important;
-      }
     }
   }
 
   .pagination {
     display: flex;
     justify-content: end;
-    margin-top: $spacing-md;
-
-    @include mobile {
-      justify-content: center;
-      margin-top: $spacing-sm;
-    }
-  }
-}
-
-// Responsive table wrapper
-:deep(.el-table) {
-  @include mobile {
-    font-size: 12px;
-
-    .el-table__header th {
-      padding: 8px 4px;
-      font-size: 11px;
-    }
-
-    .el-table__body td {
-      padding: 8px 4px;
-    }
-
-    .el-table__cell {
-      padding: 6px 4px;
-    }
   }
 }
 </style>
@@ -526,6 +423,6 @@ defineExpose({
   --el-table-tr-bg-color: var(--el-color-warning);
 }
 .el-table .visible-row {
-  --el-table-border: 1px solid #84848435;
+  --el-table-border: 1px solid #8484845d;
 }
 </style>

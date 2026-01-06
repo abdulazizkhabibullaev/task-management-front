@@ -1,22 +1,21 @@
 <template>
   <div class="dashboard">
-    <h1>{{ $t('dashboard.title') }}</h1>
-
     <div class="stats-grid">
       <div v-for="stat in statistics" :key="stat.key" class="stat-card">
         <div class="stat-value">{{ stat.value }}</div>
-        <div class="stat-label">{{ $t(stat.label) }}</div>
+        <div class="stat-label">{{ $t(`COMMON.${stat.label}`) }}</div>
       </div>
     </div>
 
     <div class="recent-tasks">
-      <h2>{{ $t('dashboard.recentTasks') }}</h2>
+      <h2>{{ $t('COMMON.RECENT_TASKS') }}</h2>
 
       <Table
         :page-name="PageNames.TASKS"
         data-url="task/paging"
         :editable="false"
         :deletable="false"
+        :create-button="false"
       />
     </div>
   </div>
@@ -25,8 +24,6 @@
 <script lang="ts" setup>
 import { $api } from '@/common/api';
 import { PageNames } from '@/common/constants/table';
-import Card from '@/components/common/Card.vue';
-import router from '@/router';
 import { CircleCheck, Clock, Document, Warning } from '@element-plus/icons-vue';
 import { computed, onMounted, ref } from 'vue';
 
@@ -41,28 +38,28 @@ const taskStats = ref({
 const statistics = computed(() => [
   {
     key: 'total',
-    label: 'dashboard.stats.totalTasks',
+    label: 'TOTAL_TASKS',
     value: taskStats.value.total,
     icon: Document,
     color: 'blue',
   },
   {
     key: 'to_do',
-    label: 'dashboard.stats.toDoTasks',
+    label: 'TO_DO_TASKS',
     value: taskStats.value.to_do,
     icon: Clock,
     color: 'gray',
   },
   {
     key: 'in_progress',
-    label: 'dashboard.stats.inProgressTasks',
+    label: 'IN_PROGRESS_TASKS',
     value: taskStats.value.in_progress,
     icon: Warning,
     color: 'orange',
   },
   {
     key: 'completed',
-    label: 'dashboard.stats.completedTasks',
+    label: 'COMPLETED_TASKS',
     value: taskStats.value.completed,
     icon: CircleCheck,
     color: 'green',
@@ -87,14 +84,6 @@ const fetchDashboardData = async () => {
   } finally {
     loading.value = false;
   }
-};
-
-const goToTasks = () => {
-  router.push({ name: 'tasks' });
-};
-
-const viewTask = (id: string) => {
-  router.push({ name: 'task-detail', params: { id: id } });
 };
 
 onMounted(() => {

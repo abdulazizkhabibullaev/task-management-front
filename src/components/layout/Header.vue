@@ -28,7 +28,7 @@
               <el-icon :size="16">
                 <SwitchButton />
               </el-icon>
-              <span>{{ $t('common.logout') }}</span>
+              <span>{{ $t('COMMANDS.LOGOUT') }}</span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>

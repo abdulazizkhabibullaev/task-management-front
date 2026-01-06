@@ -4,8 +4,8 @@
     <div class="login-card">
       <div class="form">
         <div class="form-header">
-          <h1 class="form-title">{{ $t('auth.login') }}</h1>
-          <p class="form-subtitle">{{ $t('auth.loginSubtitle') }}</p>
+          <h1 class="form-title">{{ $t('COMMANDS.LOGIN') }}</h1>
+          <p class="form-subtitle">{{ $t('COMMON.LOGIN_SUBTITLE') }}</p>
         </div>
 
         <el-form
@@ -22,18 +22,17 @@
           />
 
           <TextInput
-            :label="$t('auth.password')"
+            :label="$t('FORMS.PASSWORD')"
             prop="password"
             type="password"
             :model-value="loginForm.password"
             @input="(val: string) => (loginForm.password = val)"
             :disabled="loading"
-            :placeholder="$t('auth.passwordPlaceholder')"
             @keyup.enter="handleLogin"
           />
 
           <Button
-            :name="$t('auth.login')"
+            :name="$t('COMMANDS.LOGIN')"
             @click="handleLogin"
             :loading="loading"
             :disabled="loading"
@@ -42,9 +41,9 @@
         </el-form>
 
         <div class="register-link">
-          <span>{{ $t('auth.noAccount') }}</span>
+          <span>{{ $t('COMMON.NO_ACCOUNT') }}</span>
           <el-button type="primary" link @click="goToRegister">
-            {{ $t('auth.register') }}
+            {{ $t('COMMANDS.REGISTER') }}
           </el-button>
         </div>
       </div>
@@ -53,18 +52,16 @@
 </template>
 
 <script lang="ts" setup>
-import { $api } from '@/common/api';
 import Button from '@/components/common/Button.vue';
-import TextInput from '@/components/common/form-elements/TextInput.vue';
 import PhoneNumberInput from '@/components/common/form-elements/PhoneNumberInput.vue';
+import TextInput from '@/components/common/form-elements/TextInput.vue';
 import LanguageSelect from '@/components/common/LanguageSelect.vue';
+import { $t } from '@/plugins/i18n';
 import router from '@/router';
 import { useMainStore } from '@/stores/main';
 import { ElMessage, type FormRules } from 'element-plus';
 import { reactive, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
 const loading = ref(false);
 const loginFormRef = ref();
 const mainStore = useMainStore();
@@ -78,19 +75,19 @@ const loginRules = reactive<FormRules>({
   login: [
     {
       required: true,
-      message: t('auth.phoneNumberRequired'),
+      message: $t('FORMS.REQUIRED'),
       trigger: ['blur'],
     },
   ],
   password: [
     {
       required: true,
-      message: t('auth.passwordRequired'),
+      message: $t('FORMS.REQUIRED'),
       trigger: ['blur'],
     },
     {
       min: 6,
-      message: t('auth.passwordMinLength'),
+      message: $t('FORMS.PASSWORD_MIN_LENGTH'),
       trigger: ['blur'],
     },
   ],
@@ -105,12 +102,11 @@ const handleLogin = async () => {
           login: loginForm.login,
           password: loginForm.password,
         });
-        ElMessage.success(t('auth.loginSuccess'));
+        ElMessage.success($t('MESSAGES.SUCCESS'));
         router.push({ name: 'dashboard' });
       }
     });
   } catch (e: any) {
-    ElMessage.error(e.message || t('auth.loginError'));
   } finally {
     loading.value = false;
   }

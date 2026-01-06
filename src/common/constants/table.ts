@@ -42,9 +42,9 @@ export const getTableColumns = (page_name: PageNames, lang = 'uz') => {
           type: TableColumnType.ENUM,
           translation_key: 'PRIORITY',
           enum_values: {
-            low: { translation_key: 'tasks.priority.low', color: '#67C23A' },
-            medium: { translation_key: 'tasks.priority.medium', color: '#E6A23C' },
-            high: { translation_key: 'tasks.priority.high', color: '#F56C6C' },
+            low: { translation_key: 'LOW', color: '#67C23A' },
+            medium: { translation_key: 'MEDIUM', color: '#E6A23C' },
+            high: { translation_key: 'HIGH', color: '#F56C6C' },
           },
         },
         {
@@ -58,12 +58,12 @@ export const getTableColumns = (page_name: PageNames, lang = 'uz') => {
           type: TableColumnType.ENUM,
           translation_key: 'STATUS',
           enum_values: {
-            to_do: { translation_key: 'tasks.status.to_do', color: '#909399' },
+            to_do: { translation_key: 'TO_DO', color: '#909399' },
             in_progress: {
-              translation_key: 'tasks.status.in_progress',
+              translation_key: 'IN_PROGRESS',
               color: '#E6A23C',
             },
-            completed: { translation_key: 'tasks.status.completed', color: '#67C23A' },
+            completed: { translation_key: 'COMPLETED', color: '#67C23A' },
           },
         },
       ];

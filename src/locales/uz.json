@@ -1,120 +1,24 @@
 {
-    "auth": {
-        "login": "Kirish",
-        "register": "Ro'yxatdan o'tish",
-        "loginSubtitle": "Xush kelibsiz! Hisobingizga kiring",
-        "registerSubtitle": "Boshlash uchun yangi hisob yarating",
-        "phoneNumber": "Telefon raqami",
-        "password": "Parol",
-        "confirmPassword": "Parolni tasdiqlang",
-        "fullName": "To'liq ism",
-        "phoneNumberPlaceholder": "Telefon raqamini kiriting",
-        "passwordPlaceholder": "Parol kiriting",
-        "confirmPasswordPlaceholder": "Parolni tasdiqlang",
-        "fullNamePlaceholder": "To'liq ismni kiriting",
-        "phoneNumberRequired": "Telefon raqami kiritilishi shart",
-        "passwordRequired": "Parol kiritilishi shart",
-        "passwordMinLength": "Parol kamida 6 ta belgidan iborat bo'lishi kerak",
-        "confirmPasswordRequired": "Parolni tasdiqlang",
-        "passwordsNotMatch": "Parollar mos kelmaydi",
-        "fullNameRequired": "To'liq ism kiritilishi shart",
-        "noAccount": "Hisobingiz yo'qmi?",
-        "haveAccount": "Hisobingiz bormi?",
-        "loginSuccess": "Muvaffaqiyatli kirildi!",
-        "loginError": "Kirish xatosi. Ma'lumotlaringizni tekshiring",
-        "registerSuccess": "Ro'yxatdan o'tish muvaffaqiyatli! Kirish",
-        "registerError": "Ro'yxatdan o'tish xatosi. Qayta urinib ko'ring"
+    "COMMON": {
+        "TOTAL_TASKS": "Jami vazifalar",
+        "COMPLETED_TASKS": "Bajarilgan vazifalar",
+        "TO_DO_TASKS": "Bajarilishi kerak bo'lgan vazifalar",
+        "IN_PROGRESS_TASKS": "Jarayondagi vazifalar",
+        "DELETE_CONFIRM": "Siz rostdan ham o'chirmoqchimisiz?",
+        "PROJECT": "Loyiha",
+        "RECENT_TASKS": "So'nggi vazifalar",
+        "TO_DO": "Bajarilishi kerak",
+        "IN_PROGRESS": "Jarayonda",
+        "COMPLETED": "Bajarilgan",
+        "LOW": "Past",
+        "MEDIUM": "O'rta",
+        "HIGH": "Yuqori",
+        "TASK": "Vazifa"
     },
-    "dashboard": {
-        "title": "Boshqaruv paneli",
-        "subtitle": "Vazifalar va loyihalar sharhi",
-        "recentTasks": "So'nggi vazifalar",
-        "viewAll": "Hammasini ko'rish",
-        "stats": {
-            "totalTasks": "Jami vazifalar",
-            "toDoTasks": "Bajarilishi kerak",
-            "inProgressTasks": "Jarayonda",
-            "completedTasks": "Tugallangan",
-            "totalProjects": "Loyihalar"
-        }
-    },
-    "project": {
-        "title": "Loyihalar",
-        "subtitle": "Loyihalarni boshqarish",
-        "addProject": "Loyiha qo'shish",
-        "createProject": "Loyiha yaratish",
-        "editProject": "Loyihani tahrirlash",
-        "name": "Nomi",
-        "description": "Tavsif",
-        "taskCount": "Vazifalar",
-        "tasks": "vazifa",
-        "namePlaceholder": "Loyiha nomini kiriting",
-        "descriptionPlaceholder": "Loyiha tavsifini kiriting",
-        "searchPlaceholder": "Loyihalarni qidirish...",
-        "selectProject": "Loyiha tanlang",
-        "nameRequired": "Loyiha nomi kiritilishi shart",
-        "createSuccess": "Loyiha muvaffaqiyatli yaratildi",
-        "updateSuccess": "Loyiha muvaffaqiyatli yangilandi",
-        "deleteSuccess": "Loyiha muvaffaqiyatli o'chirildi",
-        "fetchError": "Loyihalarni yuklashda xato",
-        "submitError": "Loyihani saqlashda xato",
-        "deleteError": "Loyihani o'chirishda xato",
-        "deleteConfirm": "'{name}' loyihasini o'chirishni xohlaysizmi? Barcha bog'langan vazifalar ham o'chiriladi."
-    },
-    "task": {
-        "title": "Vazifalar",
-        "subtitle": "Vazifalarni boshqarish",
-        "addTask": "Vazifa qo'shish",
-        "createTask": "Vazifa yaratish",
-        "editTask": "Vazifani tahrirlash",
-        "project": "Loyiha",
-        "dueDate": "Muddat",
-        "titlePlaceholder": "Vazifa nomini kiriting",
-        "descriptionPlaceholder": "Vazifa tavsifini kiriting",
-        "searchPlaceholder": "Vazifalarni qidirish...",
-        "selectProject": "Loyiha tanlang",
-        "selectStatus": "Status tanlang",
-        "selectPriority": "Muhimlik darajasini tanlang",
-        "selectDueDate": "Sanani tanlang",
-        "titleRequired": "Vazifa nomi kiritilishi shart",
-        "projectRequired": "Loyiha kiritilishi shart",
-        "statusRequired": "Status kiritilishi shart",
-        "priorityRequired": "Muhimlik darajasi kiritilishi shart",
-        "createSuccess": "Vazifa muvaffaqiyatli yaratildi",
-        "updateSuccess": "Vazifa muvaffaqiyatli yangilandi",
-        "deleteSuccess": "Vazifa muvaffaqiyatli o'chirildi",
-        "fetchError": "Vazifalarni yuklashda xato",
-        "submitError": "Vazifani saqlashda xato",
-        "deleteError": "Vazifani o'chirishda xato",
-        "deleteConfirm": "'{title}' vazifasini o'chirishni xohlaysizmi?",
-        "status": {
-            "label": "Status",
-            "to_do": "Bajarilishi kerak",
-            "in_progress": "Jarayonda",
-            "completed": "Tugallangan"
-        },
-        "priority": {
-            "label": "Muhimlik darajasi",
-            "low": "Past",
-            "medium": "O'rta",
-            "high": "Yuqori"
-        }
-    },
-    "common": {
-        "actions": "Harakatlar",
-        "search": "Qidirish",
-        "view": "Ko'rish",
-        "edit": "Tahrirlash",
-        "delete": "O'chirish",
-        "cancel": "Bekor qilish",
-        "confirm": "Tasdiqlash",
-        "save": "Saqlash",
-        "close": "Yopish",
-        "logout": "Chiqish",
-        "warning": "Ogohlantirish",
-        "createdAt": "Yaratilgan",
-        "updatedAt": "Yangilangan",
-        "noData": "Ma'lumot yo'q"
+    "NAV_ASIDE": {
+        "DASHBOARD": "Dashboard",
+        "PROJECTS": "Loyihalar",
+        "TASKS": "Vazifalar"
     },
     "TABLE": {
         "NUMBER": "№",
@@ -134,6 +38,35 @@
     "COMMANDS": {
         "CREATE": "Yaratish",
         "UPDATE": "Yangilash",
-        "DELETE": "O'chirish"
+        "DELETE": "O'chirish",
+        "CANCEL": "Bekor qilish",
+        "SAVE": "Saqlash",
+        "CONFIRM": "Tasdiqlash",
+        "SEARCH": "Qidirish",
+        "LOGOUT": "Chiqish"
+    },
+    "LANGUAGE": {
+        "UZ": "O'zbekcha",
+        "EN": "English",
+        "RU": "Русский"
+    },
+    "MESSAGES": {
+        "SUCCESS": "Muvaffaqiyatli",
+        "SUCCESS_CREATE": "Muvaffaqiyatli yaratildi!",
+        "SUCCESS_UPDATE": "Muvaffaqiyatli yangilandi!",
+        "SUCCESS_DELETE": "Muvaffaqiyatli o'chirildi!"
+    },
+    "FORMS": {
+        "TITLES": {
+            "CREATE": "Yangi {item} yaratish",
+            "UPDATE": "{item} ni yangilash"
+        },
+        "NAME": "Nomi",
+        "TITLE": "Sarlavha",
+        "DESCRIPTION": "Tavsif",
+        "PROJECT": "Loyiha",
+        "STATUS": "Status",
+        "PRIORITY": "Muhimlik darajasi",
+        "DUE_DATE": "Muddat"
     }
 }

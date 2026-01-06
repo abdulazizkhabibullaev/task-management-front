@@ -1,8 +1,11 @@
+import type { Project } from './project';
+
 export interface Task {
   _id?: string;
   title: string;
   description?: string;
   project_id: string;
+  project?: Project;
   user_id?: string;
   status: 'to_do' | 'in_progress' | 'completed';
   priority: 'low' | 'medium' | 'high';

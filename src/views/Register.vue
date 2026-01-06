@@ -4,8 +4,8 @@
     <div class="register-card">
       <div class="form">
         <div class="form-header">
-          <h1 class="form-title">{{ $t('auth.register') }}</h1>
-          <p class="form-subtitle">{{ $t('auth.registerSubtitle') }}</p>
+          <h1 class="form-title">{{ $t('FORMS.REGISTER') }}</h1>
+          <p class="form-subtitle">{{ $t('FORMS.REGISTER_SUBTITLE') }}</p>
         </div>
 
         <el-form
@@ -16,12 +16,11 @@
           :rules="registerRules"
         >
           <TextInput
-            :label="$t('auth.fullName')"
+            :label="$t('FORMS.FULL_NAME')"
             prop="full_name"
             :model-value="registerForm.full_name"
             @input="(val: string) => (registerForm.full_name = val)"
             :disabled="loading"
-            :placeholder="$t('auth.fullNamePlaceholder')"
           />
 
           <PhoneNumberInput
@@ -31,28 +30,26 @@
           />
 
           <TextInput
-            :label="$t('auth.password')"
+            :label="$t('FORMS.PASSWORD')"
             prop="password"
             type="password"
             :model-value="registerForm.password"
             @input="(val: string) => (registerForm.password = val)"
             :disabled="loading"
-            :placeholder="$t('auth.passwordPlaceholder')"
           />
 
           <TextInput
-            :label="$t('auth.confirmPassword')"
+            :label="$t('FORMS.CONFIRM_PASSWORD')"
             prop="confirmPassword"
             type="password"
             :model-value="registerForm.confirmPassword"
             @input="(val: string) => (registerForm.confirmPassword = val)"
             @keyup.enter="handleRegister"
             :disabled="loading"
-            :placeholder="$t('auth.confirmPasswordPlaceholder')"
           />
 
           <Button
-            :name="$t('auth.register')"
+            :name="$t('FORMS.REGISTER')"
             @click="handleRegister"
             :loading="loading"
             :disabled="loading"
@@ -61,9 +58,9 @@
         </el-form>
 
         <div class="login-link">
-          <span>{{ $t('auth.haveAccount') }}</span>
+          <span>{{ $t('COMMON.HAVE_ACCOUNT') }}</span>
           <el-button type="primary" link @click="goToLogin">
-            {{ $t('auth.login') }}
+            {{ $t('COMMANDS.LOGIN') }}
           </el-button>
         </div>
       </div>
@@ -74,16 +71,15 @@
 <script lang="ts" setup>
 import { $api } from '@/common/api';
 import Button from '@/components/common/Button.vue';
-import TextInput from '@/components/common/form-elements/TextInput.vue';
 import PhoneNumberInput from '@/components/common/form-elements/PhoneNumberInput.vue';
+import TextInput from '@/components/common/form-elements/TextInput.vue';
 import LanguageSelect from '@/components/common/LanguageSelect.vue';
+import { $t } from '@/plugins/i18n';
 import router from '@/router';
 import { useMainStore } from '@/stores/main';
-import { ElMessage, type FormRules, type FormInstance } from 'element-plus';
+import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
 import { reactive, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
 const loading = ref(false);
 const registerFormRef = ref<FormInstance>();
 const mainStore = useMainStore();
@@ -97,9 +93,9 @@ const registerForm = reactive({
 
 const validatePasswordMatch = (_rule: any, value: any, callback: any) => {
   if (value === '') {
-    callback(new Error(t('auth.confirmPasswordRequired')));
+    callback(new Error($t('FORMS.REQUIRED')));
   } else if (value !== registerForm.password) {
-    callback(new Error(t('auth.passwordsNotMatch')));
+    callback(new Error($t('FORMS.PASSWORDS_NOT_MATCH')));
   } else {
     callback();
   }
@@ -109,26 +105,26 @@ const registerRules = reactive<FormRules>({
   full_name: [
     {
       required: true,
-      message: t('auth.fullNameRequired'),
+      message: $t('FORMS.REQUIRED'),
       trigger: ['blur'],
     },
   ],
   login: [
     {
       required: true,
-      message: t('auth.phoneNumberRequired'),
+      message: $t('FORMS.REQUIRED'),
       trigger: ['blur'],
     },
   ],
   password: [
     {
       required: true,
-      message: t('auth.passwordRequired'),
+      message: $t('FORMS.REQUIRED'),
       trigger: ['blur'],
     },
     {
       min: 6,
-      message: t('auth.passwordMinLength'),
+      message: $t('FORMS.PASSWORD_MIN_LENGTH'),
       trigger: ['blur'],
     },
   ],
@@ -152,12 +148,11 @@ const handleRegister = async () => {
         });
         await mainStore.setToken(response.token);
         await mainStore.setUser(response);
-        ElMessage.success(t('auth.registerSuccess'));
+        ElMessage.success($t('MESSAGES.SUCCESS'));
         router.push({ name: 'dashboard' });
       }
     });
   } catch (e: any) {
-    ElMessage.error(e.message || t('auth.registerError'));
   } finally {
     loading.value = false;
   }

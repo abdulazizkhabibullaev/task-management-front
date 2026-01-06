@@ -1,10 +1,9 @@
 <template>
   <div class="sidebar-container" :class="{ collapsed: collapsed }">
-    <!-- Logo/Brand Header -->
     <div class="sidebar-header">
       <div class="brand">
-        <h2 v-if="!collapsed">TaskFlow</h2>
-        <h2 v-else>TF</h2>
+        <h2 v-if="!collapsed">Task Management</h2>
+        <h2 v-else>TM</h2>
       </div>
       <el-icon class="toggle-btn" :size="20" @click="$emit('toggle')">
         <Fold v-if="!collapsed" />
@@ -12,7 +11,6 @@
       </el-icon>
     </div>
 
-    <!-- Navigation Menu -->
     <el-menu
       class="nav-menu"
       :collapse="collapsed"
@@ -24,7 +22,7 @@
           <HomeFilled />
         </el-icon>
         <template #title>
-          <span class="nav-text">{{ $t('dashboard.title') }}</span>
+          <span class="nav-text">{{ $t('NAV_ASIDE.DASHBOARD') }}</span>
         </template>
       </el-menu-item>
 
@@ -33,7 +31,7 @@
           <Folder />
         </el-icon>
         <template #title>
-          <span class="nav-text">{{ $t('project.title') }}</span>
+          <span class="nav-text">{{ $t('NAV_ASIDE.PROJECTS') }}</span>
         </template>
       </el-menu-item>
 
@@ -42,7 +40,7 @@
           <Document />
         </el-icon>
         <template #title>
-          <span class="nav-text">{{ $t('task.title') }}</span>
+          <span class="nav-text">{{ $t('NAV_ASIDE.TASKS') }}</span>
         </template>
       </el-menu-item>
     </el-menu>
