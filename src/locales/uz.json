@@ -16,7 +16,8 @@
         "TASK": "Vazifa",
         "LOGIN_SUBTITLE": "Davom etish uchun tizimga kiring",
         "NO_ACCOUNT": "Akkountingiz yo'qmi?",
-        "HAVE_ACCOUNT": "Akkountingiz bormi?"
+        "HAVE_ACCOUNT": "Akkountingiz bormi?",
+        "NOTHING_FOUND": "Hech narsa topilmadi"
     },
     "NAV_ASIDE": {
         "DASHBOARD": "Dashboard",

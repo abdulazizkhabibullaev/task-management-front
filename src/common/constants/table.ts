@@ -54,6 +54,11 @@ export const getTableColumns = (page_name: PageNames, lang = 'uz') => {
           date_format: 'DD.MM.YYYY',
         },
         {
+          key: 'project.name',
+          type: TableColumnType.STRING,
+          translation_key: 'PROJECT',
+        },
+        {
           key: 'status',
           type: TableColumnType.ENUM,
           translation_key: 'STATUS',
